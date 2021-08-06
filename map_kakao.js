@@ -8,6 +8,7 @@ const _className = "_" + Math.random().toString(36).substring(2, 7);
 const _buttonStyle = "width: 175px;height: 38px;line-height: 38px;text-align: center;background: linear-gradient(to bottom, #17e677, #19d1d1);color: #ffffff;font-size: 13px;border: 1px solid #149393;cursor: pointer;";
 
 let nums = new Array();
+let vaccineCode = "VEN00013";
 
 const injectButton = () => {
     if (!sButtonReload)
@@ -179,14 +180,6 @@ const macro = (value, response) => {
         // console.log("parsed list. hospital list string changed.");
     }
 
-    // console.log(hospitalList);
-    if (!hospitalList || hospitalList.length == 0) {
-        console.log("hospitalList is empty. cannot macro execute.");
-        macroStop('empty');
-        alert("병원 목록 데이터가 없습니다. 현재 지도에서 새로고침을 수행한 graphql result를 매크로 페이지에 입력하여 병원 목록을 생성한 뒤 동작 시켜주세요.");
-        return;
-    }
-
     if (response && response.status === 200) {
         response.json().then(function (data) {
             // console.log(data);
@@ -217,14 +210,14 @@ const macro = (value, response) => {
     _reload();
 };
 
-const RESERVE_URL = 'https://v-search.nid.naver.com/reservation?orgCd=';
-const RESERVER_URL_ADD_PARM = '&sid=';
+# https://vaccine.kakao.com/reservation/12301302?code=VEN00013
+const RESERVE_URL = 'https://vaccine.kakao.com/reservation/';
+const RESERVER_URL_ADD_PARM = '?code=';
 
 const openReservePage = (name, obj) => {
     if (obj && obj.vaccineQuantity && obj.vaccineQuantity.vaccineOrganizationCode) {
         const orgCd = obj.vaccineQuantity.vaccineOrganizationCode;
-        const sid = obj.id;
-        const url = RESERVE_URL + orgCd + RESERVER_URL_ADD_PARM + sid;
+        const url = RESERVE_URL + orgCd + RESERVER_URL_ADD_PARM + vaccineCode;
         console.log("try open url : " + url);
         document.location.href = url;
         return true;
